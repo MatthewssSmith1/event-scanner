@@ -1,0 +1,15 @@
+{
+  "files.exclude": {
+    ".eslintrc.json": true,
+    ".vscode": true,
+    ".gitignore": true,
+    "next-env.d.ts": true,
+    "next.config.js": true,
+    "package-lock.json": true,
+    "README.md": true,
+    "tsconfig.json": true,
+    ".next": true,
+    "node_modules": true
+  },
+  "workspace.isHidden": false
+}
