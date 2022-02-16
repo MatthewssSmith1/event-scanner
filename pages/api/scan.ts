@@ -12,15 +12,32 @@ export default async function handler(
   if (req.method !== "POST")
     return res.status(405).send({ message: "Only POST requests allowed" });
 
-  const ticketData = JSON.parse(req.body);
+  const ticketData: string = JSON.parse(req.body);
 
-  const found = await db.collection("tickets").findOne({ _id: ticketData });
+  if (!ticketData) return res.status(200).json({ message: "invalid ticket" });
 
-  if (found) {
-    return res.status(200).json({ data: ticketData, lastUsed: "sometime" });
-  }
+  const dataSplit = ticketData.split(" ");
 
-  await db.collection("tickets").insertOne({ _id: ticketData });
+  if (dataSplit.length != 3)
+    return res.status(200).json({ message: "invalid ticket" });
 
-  return res.status(200).json({ data: ticketData, lastUsed: "never" });
+  const [date, name, num] = dataSplit;
+
+  const found = await db.collection("tickets").findOne({ data: ticketData });
+
+  if (found) return res.status(200).json(found as any);
+
+  const newState = {
+    data: ticketData,
+    date,
+    name,
+    num,
+    lastUsed: Date.now(),
+  };
+
+  await db
+    .collection("tickets")
+    .insertOne({ ...newState, isNew: false } as TicketState);
+
+  return res.status(200).json({ ...newState, isNew: true });
 }

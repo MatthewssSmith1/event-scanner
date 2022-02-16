@@ -1,10 +1,21 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
+import cn from "classnames";
+
+import styles from "./index.module.css";
 
 export type TicketState = {
   data: string;
-  lastUsed: string;
+  date: string;
+  name: string;
+  num: string;
+  lastUsed: number;
+  isNew: boolean;
+};
+
+export type Err = {
+  message: string;
 };
 
 const QrReader = dynamic(() => import("react-qr-reader"), { ssr: false });
@@ -23,28 +34,45 @@ export default function Home() {
 
     if (!res) return;
 
-    console.log(res.status);
-    const ticket: TicketState = await res.json();
-    setTicket(ticket);
+    const ticket: TicketState | Err = await res.json();
+    if (ticket as TicketState) setTicket(ticket as TicketState);
+    if (ticket as Err) setErr((ticket as Err).message);
   };
 
+  var lastUsed = "never";
+  if (ticket as TicketState) {
+    var secondsElapsed = Math.ceil(
+      (Date.now() - (ticket as TicketState).lastUsed) / 1000
+    );
+    if (secondsElapsed < 60) lastUsed = `${secondsElapsed} seconds ago`;
+    else lastUsed = `${Math.ceil(secondsElapsed / 60)} minutes ago`;
+  }
+
   return (
-    <div className="content">
+    <div className={styles.content}>
       <nav>
-        {ticket && (
-          <div onClick={() => setTicket(null)}>
-            <ArrowLeftIcon />
-          </div>
-        )}
+        <div onClick={() => setTicket(null)}>
+          <ArrowLeftIcon />
+        </div>
       </nav>
       {ticket && (
         <>
-          <h1>{ticket.data}</h1>
-          <h2 style={{backgroundColor: (ticket.lastUsed == "never") ? "green" : "red"}}>{ticket.lastUsed}</h2>
+          <div className={styles.info}>
+            <h1>{ticket.date}</h1>
+            <h1>{ticket.name.replaceAll("_", " ")}</h1>
+            <h1>{ticket.num}</h1>
+          </div>
+          <div
+            className={cn(styles.lastUsed, {
+              [`${styles.isNew}`]: ticket.isNew,
+            })}
+          >
+            <h1>{lastUsed}</h1>
+          </div>
         </>
       )}
       {!ticket && (
-        <div style={{width: "100vw", height: "100vw"}}>
+        <div style={{ width: "100vw", height: "100vw" }}>
           <QrReader onScan={onScan} onError={setErr} />
         </div>
       )}
