@@ -21,14 +21,15 @@ export type Err = {
 const QrReader = dynamic(() => import("react-qr-reader"), { ssr: false });
 
 export default function Home() {
-  const [ticket, setTicket] = useState<TicketState | null>({
-    data: "2/16 Jerry 5 2189890",
-    date: "2/16",
-    name: "Jerry",
-    num: "5",
-    lastUsed: 10000000,
-    isNew: true
-  });
+  const [ticket, setTicket] = useState<TicketState | null>(null);
+  // {
+  //   data: "2/16 Jerry 5 2189890",
+  //   date: "2/16",
+  //   name: "Jerry",
+  //   num: "5",
+  //   lastUsed: 10000000,
+  //   isNew: true
+  // }
   const [err, setErr] = useState<string | null>();
 
   const onScan = async (data: string | null) => {
@@ -66,12 +67,9 @@ export default function Home() {
       {ticket && ticket.data && (
         <>
           <div className={styles.info}>
-            {ticket.data
-              .split(" ")
-              .filter((s, i) => i < 3)
-              .map((s, i) => (
-                <h1 key={i}>{s}</h1>
-              ))}
+            <h1>{ticket.date}</h1>
+            <h1>{ticket.name.replaceAll("_", " ")}</h1>
+            <h1>{ticket.num}</h1>
           </div>
           <div
             className={cn(styles.lastUsed, {
