@@ -21,7 +21,14 @@ export type Err = {
 const QrReader = dynamic(() => import("react-qr-reader"), { ssr: false });
 
 export default function Home() {
-  const [ticket, setTicket] = useState<TicketState | null>(null);
+  const [ticket, setTicket] = useState<TicketState | null>({
+    data: "",
+    date: "2/16",
+    name: "Jerry",
+    num: "5",
+    lastUsed: 10000000,
+    isNew: true
+  });
   const [err, setErr] = useState<string | null>();
 
   const onScan = async (data: string | null) => {
