@@ -63,14 +63,14 @@ export default function Home() {
           <ArrowLeftIcon />
         </div>
       </nav>
-      {ticket && (
+      {ticket && ticket.data && (
         <>
           <div className={styles.info}>
             {ticket.data
               .split(" ")
               .filter((s, i) => i < 3)
-              .map((s) => (
-                <h1>{s.replaceAll("_"," ")}</h1>
+              .map((s, i) => (
+                <h1 key={i}>{s.replaceAll("_"," ")}</h1>
               ))}
           </div>
           <div
