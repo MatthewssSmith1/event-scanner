@@ -59,7 +59,7 @@ export default function Home() {
         <>
           <div className={styles.info}>
             <h1>{ticket.date}</h1>
-            <h1>{ticket.name.replaceAll("_", " ")}</h1>
+            <h1>{(ticket.name || "").replaceAll("_", " ")}</h1>
             <h1>{ticket.num}</h1>
           </div>
           <div
