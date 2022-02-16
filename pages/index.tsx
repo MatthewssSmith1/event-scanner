@@ -22,7 +22,7 @@ const QrReader = dynamic(() => import("react-qr-reader"), { ssr: false });
 
 export default function Home() {
   const [ticket, setTicket] = useState<TicketState | null>({
-    data: "",
+    data: "2/16 Jerry 5 2189890",
     date: "2/16",
     name: "Jerry",
     num: "5",
@@ -54,7 +54,7 @@ export default function Home() {
     if (secondsElapsed < 60) lastUsed = `${secondsElapsed} seconds ago`;
     else lastUsed = `${Math.ceil(secondsElapsed / 60)} minutes ago`;
   }
-  
+
 
   return (
     <div className={styles.content}>
@@ -66,9 +66,12 @@ export default function Home() {
       {ticket && (
         <>
           <div className={styles.info}>
-            <h1>{ticket.date}</h1>
-            <h1>{(ticket.name || "").replaceAll("_", " ")}</h1>
-            <h1>{ticket.num}</h1>
+            {ticket.data
+              .split(" ")
+              .filter((s, i) => i < 3)
+              .map((s) => (
+                <h1>{s.replaceAll("_"," ")}</h1>
+              ))}
           </div>
           <div
             className={cn(styles.lastUsed, {
