@@ -54,6 +54,7 @@ export default function Home() {
     if (secondsElapsed < 60) lastUsed = `${secondsElapsed} seconds ago`;
     else lastUsed = `${Math.ceil(secondsElapsed / 60)} minutes ago`;
   }
+  
 
   return (
     <div className={styles.content}>
