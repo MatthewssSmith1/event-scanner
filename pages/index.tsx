@@ -40,7 +40,7 @@ export default function Home() {
   };
 
   var lastUsed = "never";
-  if (ticket as TicketState) {
+  if (ticket as TicketState && !ticket?.isNew) {
     var secondsElapsed = Math.ceil(
       (Date.now() - (ticket as TicketState).lastUsed) / 1000
     );
