@@ -24,7 +24,10 @@ export default async function handler(
 
   const [date, name, num, hash] = dataSplit;
 
-  if (stringHash(`${date} ${name} ${num}`).toString() != hash)
+  if (
+    stringHash(`${date} ${name} ${num}${process.env.HASH_SECRET}`).toString() !=
+    hash
+  )
     return res.status(200).json({ message: "invalid ticket" });
   
   const found = await db.collection("tickets").findOne({ data: ticketData });
