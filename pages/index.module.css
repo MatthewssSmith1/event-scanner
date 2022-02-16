@@ -58,7 +58,9 @@
 }
 
 .scanner {
-  width: 100vw;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 5rem;
   height: 100vw;
-  margin-top: 5rem;
 }
