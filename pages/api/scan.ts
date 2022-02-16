@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../components/mongoClient";
 import { Db } from "mongodb";
 import { TicketState } from "../index";
+import stringHash from "string-hash";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,11 +19,14 @@ export default async function handler(
 
   const dataSplit = ticketData.split(" ");
 
-  if (dataSplit.length != 3)
+  if (dataSplit.length != 4)
     return res.status(200).json({ message: "invalid ticket" });
 
-  const [date, name, num] = dataSplit;
+  const [date, name, num, hash] = dataSplit;
 
+  if (stringHash(`${date} ${name} ${num}`).toString() != hash)
+    return res.status(200).json({ message: "invalid ticket" });
+  
   const found = await db.collection("tickets").findOne({ data: ticketData });
 
   if (found) return res.status(200).json(found as any);

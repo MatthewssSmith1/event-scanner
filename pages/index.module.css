@@ -45,11 +45,12 @@
   left: 0;
   bottom: 0;
   right: 0;
-  height: 50vh;
+  height: 30vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: red;
+  color: white;
 }
 
 .lastUsed.isNew {
