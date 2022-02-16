@@ -70,7 +70,7 @@ export default function Home() {
               .split(" ")
               .filter((s, i) => i < 3)
               .map((s, i) => (
-                <h1 key={i}>{s.replaceAll("_"," ")}</h1>
+                <h1 key={i}>{s}</h1>
               ))}
           </div>
           <div
