@@ -72,7 +72,7 @@ export default function Home() {
         </>
       )}
       {!ticket && (
-        <div style={{ width: "100vw", height: "100vw" }}>
+        <div className={styles.scanner}>
           <QrReader onScan={onScan} onError={setErr} />
         </div>
       )}
