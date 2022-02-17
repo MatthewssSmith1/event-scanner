@@ -88,7 +88,7 @@ function TicketView({ ticket, setTicket }: TicketViewProps) {
       </div>
       <div className={styles.info}>
         <h1>{date}</h1>
-        <h1>{name.replaceAll("_", " ")}</h1>
+        <h1>{name}</h1>
         <h1>{num}</h1>
       </div>
       <div
