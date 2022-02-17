@@ -31,8 +31,6 @@ const exTicket: TicketState = {
 export default function Index() {
   const [ticket, setTicket] = useState<TicketState | null>(null);
 
-  console.log(ticket);
-
   return (
     <div className={styles.content}>
       {!ticket && <Home setTicket={setTicket} />}
@@ -48,7 +46,6 @@ function Home({ setTicket }: HomeProps) {
   const [err, setErr] = useState<string | null>(null);
 
   const onScan = async (data: string | null) => {
-    // console.log(data)
     if (!data) return;
 
     fetch("/api/scan", {
