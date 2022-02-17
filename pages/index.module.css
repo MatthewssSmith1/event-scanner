@@ -1,13 +1,24 @@
 .content {
+  position: fixed;
   width: 100vw;
-  /* height: 100%; */
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
 }
 
-.content nav {
+.backArrow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 5rem;
+  height: 5rem;
+  padding: 1rem;
+  z-index: 50;
+}
+
+/* .content nav {
   position: fixed;
   top: 0;
   width: 100%;
@@ -15,22 +26,26 @@
   z-index: 50;
 
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.content nav h1 {
+  font-size: 2rem;
 }
 
 .content nav div {
   width: 5rem;
   height: 5rem;
-  z-index: 50;
-  font-size: 1rem;
-  padding: 0.75rem;
-}
+  padding: 1rem;
+} */
 
 .info {
   position: fixed;
   left: 0;
   top: 0;
   right: 0;
-  height: 55vh;
+  height: 60%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -46,7 +61,8 @@
   left: 0;
   bottom: 0;
   right: 0;
-  height: 30vh;
+  height: 40%;
+  font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,9 +75,13 @@
 }
 
 .scanner {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 5rem;
+  width: 100vw;
   height: 100vw;
+}
+
+.homeInfo {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 2rem;
 }
