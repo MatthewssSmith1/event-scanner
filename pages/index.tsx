@@ -84,6 +84,26 @@ type TicketViewProps = {
 function TicketView({ ticket, setTicket }: TicketViewProps) {
   const { date, name, num, isNew } = ticket;
 
+  const formatName = (name: string) => {
+    try {
+      return name.replaceAll("_", " ");
+    } catch (_) {
+      return name;
+    }
+  };
+
+  const lastUsedText = (t: TicketState) => {
+    const { isNew, lastUsed } = t;
+
+    if (isNew) return "never";
+
+    var seconds = Math.ceil((Date.now() - lastUsed) / 1000);
+
+    if (seconds < 60) return `${seconds} seconds ago`;
+
+    return `${Math.ceil(seconds / 60)} minutes ago`;
+  };
+
   return (
     <>
       <div className={styles.backArrow} onClick={() => setTicket(null)}>
@@ -91,7 +111,7 @@ function TicketView({ ticket, setTicket }: TicketViewProps) {
       </div>
       <div className={styles.info}>
         <h1>{date}</h1>
-        <h1>{name}</h1>
+        <h1>{formatName(name)}</h1>
         <h1>{num}</h1>
       </div>
       <div
@@ -103,16 +123,4 @@ function TicketView({ ticket, setTicket }: TicketViewProps) {
       </div>
     </>
   );
-}
-
-function lastUsedText(t: TicketState) {
-  const { isNew, lastUsed } = t;
-
-  if (isNew) return "never";
-
-  var seconds = Math.ceil((Date.now() - lastUsed) / 1000);
-
-  if (seconds < 60) return `${seconds} seconds ago`;
-
-  return `${Math.ceil(seconds / 60)} minutes ago`;
 }

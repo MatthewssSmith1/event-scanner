@@ -62,7 +62,8 @@
   bottom: 0;
   right: 0;
   height: 40%;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
