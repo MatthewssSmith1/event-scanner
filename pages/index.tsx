@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeftIcon, HomeIcon } from "@heroicons/react/solid";
 const QrReader = dynamic(() => import("react-qr-reader"), { ssr: false });
 import cn from "classnames";
@@ -44,6 +44,17 @@ type HomeProps = {
 };
 function Home({ setTicket }: HomeProps) {
   const [err, setErr] = useState<string | null>(null);
+  const [count, setCount] = useState(0);
+  const [mounted, setMounted] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (mounted) return;
+    setMounted(true);
+
+    fetch("/api/count")
+      .then((res) => res.json())
+      .then(setCount);
+  });
 
   const onScan = async (data: string | null) => {
     if (!data) return;
@@ -64,12 +75,25 @@ function Home({ setTicket }: HomeProps) {
       .catch(console.log);
   };
 
+  const CountInfo = () => (
+    <>
+      <p>{`${count} tickets scanned`}</p>
+      <div className={styles.counter}>
+        <div className={styles.plus}>+</div>
+        <div className={styles.minus}>-</div>
+      </div>
+    </>
+  );
+
   return (
     <>
       <div className={styles.scanner}>
         <QrReader onScan={onScan} onError={setErr} />
       </div>
-      <div className={styles.homeInfo}>{err && <p>{err}</p>}</div>
+      <div className={styles.homeInfo}>
+        {err && <p>{err}</p>}
+        {!err && <CountInfo/>}
+      </div>
     </>
   );
 }

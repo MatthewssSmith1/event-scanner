@@ -83,6 +83,39 @@
 .homeInfo {
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   font-size: 2rem;
+}
+
+.homeInfo p {
+  margin: 0.75rem 0
+}
+
+.counter {
+  width: 12rem;
+  height: 4rem;
+  display: flex;
+}
+
+.plus, .minus {
+  height: 4rem;
+  width: 6rem;
+  text-align: center;
+  color: white;
+  line-height: 3.25rem;
+  font-size: 3rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.plus {
+  background-color: green;
+}
+
+.minus {
+  background-color: red;
+  font-size: 3.75rem;
+  line-height: 2.75rem;
 }
