@@ -29,7 +29,9 @@ const exTicket: TicketState = {
 };
 
 export default function Index() {
-  const [ticket, setTicket] = useState<TicketState | null>(exTicket);
+  const [ticket, setTicket] = useState<TicketState | null>(null);
+
+  console.log(ticket);
 
   return (
     <div className={styles.content}>
@@ -46,22 +48,23 @@ function Home({ setTicket }: HomeProps) {
   const [err, setErr] = useState<string | null>(null);
 
   const onScan = async (data: string | null) => {
+    // console.log(data)
     if (!data) return;
 
-    const res = await fetch("/api/scan", {
+    fetch("/api/scan", {
       method: "POST",
       body: JSON.stringify(data),
-    }).catch(console.log);
-
-    if (!res) return;
-
-    const ticket: TicketState | Err = await res.json();
-    if (ticket as Err) return setErr((ticket as Err).message);
-
-    if (!(ticket as TicketState)) return;
-
-    setTicket(ticket as TicketState);
-    setErr(null);
+    })
+      .then(async (res) => {
+        const json = await res.json();
+        if (res.status == 200) {
+          setTicket(json as TicketState);
+          setErr(null);
+        } else {
+          setErr((json as Err).message);
+        }
+      })
+      .catch(console.log);
   };
 
   return (
