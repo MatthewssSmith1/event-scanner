@@ -87,10 +87,11 @@
   align-items: center;
   justify-content: center;
   font-size: 2rem;
+  padding-bottom: 10vh;
 }
 
-.homeInfo p {
-  margin: 0.75rem 0
+.homeInfo > * {
+  margin: 0.5rem 0
 }
 
 .counter {

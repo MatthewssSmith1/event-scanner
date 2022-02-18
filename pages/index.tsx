@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeftIcon, HomeIcon } from "@heroicons/react/solid";
 const QrReader = dynamic(() => import("react-qr-reader"), { ssr: false });
 import cn from "classnames";
+import Cookies from "js-cookie";
 
 import styles from "./index.module.css";
 
@@ -46,12 +47,15 @@ function Home({ setTicket }: HomeProps) {
   const [err, setErr] = useState<string | null>(null);
   const [count, setCount] = useState(0);
   const [mounted, setMounted] = useState<boolean>(false);
+  const [diff, setDiff] = useState<number>(0);
 
   useEffect(() => {
     if (mounted) return;
     setMounted(true);
 
-    fetch("/api/count")
+    if (diff == 0) setDiff(parseInt(Cookies.get("diff") || "0"));
+
+    fetch("/api/count", {})
       .then((res) => res.json())
       .then(setCount);
   });
@@ -61,7 +65,7 @@ function Home({ setTicket }: HomeProps) {
 
     fetch("/api/scan", {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify(count + diff),
     })
       .then(async (res) => {
         const json = await res.json();
@@ -75,12 +79,22 @@ function Home({ setTicket }: HomeProps) {
       .catch(console.log);
   };
 
+  const updateDiffCookie = (offset: number) => {
+    Cookies.set("diff", `${diff + offset}`);
+    setDiff(diff + offset);
+  };
+
   const CountInfo = () => (
     <>
       <p>{`${count} tickets scanned`}</p>
+      <p>{`${count + diff} total`}</p>
       <div className={styles.counter}>
-        <div className={styles.plus}>+</div>
-        <div className={styles.minus}>-</div>
+        <div className={styles.plus} onClick={() => updateDiffCookie(1)}>
+          +
+        </div>
+        <div className={styles.minus} onClick={() => updateDiffCookie(-1)}>
+          -
+        </div>
       </div>
     </>
   );
@@ -92,7 +106,7 @@ function Home({ setTicket }: HomeProps) {
       </div>
       <div className={styles.homeInfo}>
         {err && <p>{err}</p>}
-        {!err && <CountInfo/>}
+        {!err && <CountInfo />}
       </div>
     </>
   );
