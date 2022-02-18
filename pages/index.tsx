@@ -53,11 +53,16 @@ function Home({ setTicket }: HomeProps) {
     if (mounted) return;
     setMounted(true);
 
-    if (diff == 0) setDiff(parseInt(Cookies.get("diff") || "0"));
+    setDiff(parseInt(Cookies.get("diff") || "0"));
 
-    fetch("/api/count", {})
-      .then((res) => res.json())
-      .then(setCount);
+    updateDiff(0);
+
+    // fetch("/api/count", {
+    //   method: "POST",
+    //   body: JSON.stringify(count + diff),
+    // })
+    //   .then((res) => res.json())
+    //   .then(setCount);
   });
 
   const onScan = async (data: string | null) => {
@@ -65,7 +70,7 @@ function Home({ setTicket }: HomeProps) {
 
     fetch("/api/scan", {
       method: "POST",
-      body: JSON.stringify(count + diff),
+      body: JSON.stringify(data),
     })
       .then(async (res) => {
         const json = await res.json();
@@ -79,9 +84,18 @@ function Home({ setTicket }: HomeProps) {
       .catch(console.log);
   };
 
-  const updateDiffCookie = (offset: number) => {
-    Cookies.set("diff", `${diff + offset}`);
-    setDiff(diff + offset);
+  const updateDiff = (offset: number) => {
+    if (offset != 0) {
+      Cookies.set("diff", `${diff + offset}`);
+      setDiff(diff + offset);
+    }
+
+    fetch("/api/count", {
+      method: "POST",
+      body: JSON.stringify(count + diff),
+    })
+      .then((res) => res.json())
+      .then(setCount);
   };
 
   const CountInfo = () => (
@@ -89,10 +103,10 @@ function Home({ setTicket }: HomeProps) {
       <p>{`${count} tickets scanned`}</p>
       <p>{`${count + diff} total`}</p>
       <div className={styles.counter}>
-        <div className={styles.plus} onClick={() => updateDiffCookie(1)}>
+        <div className={styles.plus} onClick={() => updateDiff(1)}>
           +
         </div>
-        <div className={styles.minus} onClick={() => updateDiffCookie(-1)}>
+        <div className={styles.minus} onClick={() => updateDiff(-1)}>
           -
         </div>
       </div>

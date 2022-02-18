@@ -8,10 +8,8 @@ export default async function handler(
 ) {
   const { db } = (await connectToDatabase()) as { db: Db };
 
-  const totalCount: number = JSON.parse(req.body);
-  if (totalCount === -20) {
-    const found = await db.collection("tickets").deleteMany({});
-  }
+  // const totalCount = JSON.parse(req.body);
+  // console.log(req.body);
 
   const found = await db.collection("tickets").countDocuments();
 
