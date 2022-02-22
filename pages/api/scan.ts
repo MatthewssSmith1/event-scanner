@@ -1,13 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../components/mongoClient";
 import { Db } from "mongodb";
-import { TicketState } from "../index";
+import { Ticket, Err } from "../new";
 import stringHash from "string-hash";
 import moment from "moment";
 
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<TicketState | { message: string }>
+  res: NextApiResponse<Ticket | { message: string }>
 ) {
   const { db } = (await connectToDatabase()) as { db: Db };
 
@@ -49,7 +50,7 @@ export default async function handler(
 
   await db
     .collection("tickets")
-    .insertOne({ ...newState, isNew: false } as TicketState);
+    .insertOne({ ...newState, isNew: false } as Ticket);
 
   return res.status(200).json({ ...newState, isNew: true });
 }
