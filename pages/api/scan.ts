@@ -55,9 +55,6 @@ export default async function handler(
 }
 
 function isValidDate(date: string): boolean {
-  // const to2Digits = (s: string) => (s.length == 1 ? `0${s}` : s);
-  // const monthAndDate = (d: Date) => d.toISOString().slice(5, 10).split("-");
-  // const MS_PER_DAY = 24 * 60 * 60 * 1000;
   const [tMonth, tDate] = date.split("/");
 
   var time = moment();
