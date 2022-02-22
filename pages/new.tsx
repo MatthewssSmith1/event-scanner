@@ -39,6 +39,20 @@ export default function Index() {
     updateDiff(0);
   });
 
+  const updateDiff = (offset: number) => {
+    if (offset != 0) {
+      Cookies.set("diff", `${diff + offset}`);
+      setDiff(diff + offset);
+    }
+
+    fetch("/api/count", {
+      method: "POST",
+      body: JSON.stringify(count + diff),
+    })
+      .then((res) => res.json())
+      .then(setCount);
+  };
+  
   const onScan = async (data: string | null) => {
     if (!data) return;
 
@@ -55,20 +69,6 @@ export default function Index() {
       .then((res) => res.json() as Promise<Ticket | Err>)
       .then(setView)
       .catch(console.log);
-  };
-
-  const updateDiff = (offset: number) => {
-    if (offset != 0) {
-      Cookies.set("diff", `${diff + offset}`);
-      setDiff(diff + offset);
-    }
-
-    fetch("/api/count", {
-      method: "POST",
-      body: JSON.stringify(count + diff),
-    })
-      .then((res) => res.json())
-      .then(setCount);
   };
 
   const CountInfo = () => (
@@ -125,7 +125,7 @@ function infoText(view: ViewState): string[] {
   const lastUsedText = (t: Ticket) => {
     const { isNew, lastUsed } = t;
 
-    if (isNew) return "never";
+    if (isNew) return "first use";
 
     //seconds
     var time = Math.ceil((Date.now() - lastUsed) / 1000);
