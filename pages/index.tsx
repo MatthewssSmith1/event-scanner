@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { ArrowLeftIcon, HomeIcon } from "@heroicons/react/solid";
+import { ArrowLeftIcon, XIcon } from "@heroicons/react/solid";
 const QrReader = dynamic(() => import("react-qr-reader"), { ssr: false });
 import cn from "classnames";
 import Cookies from "js-cookie";
@@ -56,13 +56,6 @@ function Home({ setTicket }: HomeProps) {
     setDiff(parseInt(Cookies.get("diff") || "0"));
 
     updateDiff(0);
-
-    // fetch("/api/count", {
-    //   method: "POST",
-    //   body: JSON.stringify(count + diff),
-    // })
-    //   .then((res) => res.json())
-    //   .then(setCount);
   });
 
   const onScan = async (data: string | null) => {
@@ -118,8 +111,13 @@ function Home({ setTicket }: HomeProps) {
       <div className={styles.scanner}>
         <QrReader onScan={onScan} onError={setErr} />
       </div>
-      <div className={styles.homeInfo}>
+      <div className={cn(styles.homeInfo, { [`${styles.red}`]: err !== null })}>
         {err && <p>{err}</p>}
+        {err && (
+          <div className={styles.xIcon} onClick={() => setErr(null)}>
+            <XIcon />
+          </div>
+        )}
         {!err && <CountInfo />}
       </div>
     </>
@@ -146,11 +144,25 @@ function TicketView({ ticket, setTicket }: TicketViewProps) {
 
     if (isNew) return "never";
 
-    var seconds = Math.ceil((Date.now() - lastUsed) / 1000);
+    //seconds
+    var time = Math.ceil((Date.now() - lastUsed) / 1000);
 
-    if (seconds < 60) return `${seconds} seconds ago`;
+    if (time < 60) return `${time} seconds ago`;
 
-    return `${Math.ceil(seconds / 60)} minutes ago`;
+    //now minutes
+    time = Math.ceil(time / 60);
+
+    if (time < 60) return `${time} minutes ago`;
+
+    //now hours
+    time = Math.ceil(time / 60);
+
+    if (time < 24) return `${time} hours ago`;
+
+    //now days
+    time = Math.ceil(time / 24);
+
+    return `${time} days ago`;
   };
 
   return (
