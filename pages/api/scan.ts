@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../components/mongoClient";
 import { Db } from "mongodb";
-import { Ticket, Err } from "../new";
+import { Ticket, Err } from "../4525";
 import stringHash from "string-hash";
 import moment from "moment";
 

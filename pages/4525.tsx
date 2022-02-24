@@ -6,7 +6,7 @@ import cn from "classnames";
 import Cookies from "js-cookie";
 import moment from "moment";
 
-import styles from "./new.module.css";
+import styles from "./4525.module.css";
 
 export type Ticket = {
   data: string;
