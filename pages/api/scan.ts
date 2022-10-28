@@ -24,9 +24,10 @@ export default async function handler(
   req: any,// NextApiRequest,
   res: any//NextApiResponse<TRes | { message: string }>
 ) {
-  return res.status(405).json({ message: "stpp early" });
+  // let {eventId, ticketData} = JSON.parse(req.body);
+  return res.status(405).json({ message: JSON.stringify(req.body) });
   // const { db } = (await connectToDatabase()) as { db: Db };
-  
+
   // // return res.status(200);
 
   // if (req.method !== "POST")
