@@ -24,15 +24,12 @@ export default async function handler(
   req: any, // NextApiRequest,
   res: any //NextApiResponse<TRes | { message: string }>
 ) {
-  let { eventId, ticketData } = req.body;
-  return res
-    .status(209)
-    .json({ message: JSON.stringify({ eventId, ticketData }) });
+  if (req.method !== "POST")
+    return res.status(405).json({ message: "Only POST requests allowed" });
 
+  let { eventId, ticketData } = req.body;
   const { db } = (await connectToDatabase()) as { db: Db };
 
-  // if (req.method !== "POST")
-  //   return res.status(405).json({ message: "Only POST requests allowed" });
 
   // let eventId, ticketData;
   // try {
@@ -49,8 +46,13 @@ export default async function handler(
   //   return res.status(406).json({ message: "parse error" });
   // }
 
-  // if (!ticketData || ticketData.length === 0)
-  //   return res.status(201).json({ message: "no ticket data provided" });
+  if (!ticketData || ticketData.length === 0)
+    return res.status(201).json({ message: "no ticket data provided" });
+
+    
+  return res
+    .status(209)
+    .json({ message: JSON.stringify({ eventId, ticketData }) });
 
   // const ticket = stringToTicket(ticketData, process.env.HASH_SECRET);
 
