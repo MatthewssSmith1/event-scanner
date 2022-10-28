@@ -56,7 +56,7 @@ export default function Scan() {
           "Content-Type": "application/json",
           // 'Content-Type': 'application/x-www-form-urlencoded',
         },
-      };
+      };e
       let res = await fetch(`${BASE_URL}/api/scan`, opts);
       let json = await res.json();
 

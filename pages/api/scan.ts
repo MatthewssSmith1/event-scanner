@@ -49,15 +49,15 @@ export default async function handler(
   if (!ticketData || ticketData.length === 0)
     return res.status(201).json({ message: "no ticket data provided" });
 
+  const ticket = stringToTicket(ticketData, process.env.HASH_SECRET);
+
+  if (ticket === undefined)
+    return res.status(202).json({ message: "invalid ticket" });
+
     
   return res
     .status(209)
     .json({ message: JSON.stringify({ eventId, ticketData }) });
-
-  // const ticket = stringToTicket(ticketData, process.env.HASH_SECRET);
-
-  // if (ticket === undefined)
-  //   return res.status(202).json({ message: "invalid ticket" });
 
   // const ticketEventId = ticket.eventId; //.replace(" ", "_");
 
