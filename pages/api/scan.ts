@@ -27,18 +27,19 @@ export default async function handler(
   // return res.status(200).json(JSON.parse(req.body));
 
   if (req.method !== "POST")
-    return res.status(405).send({ message: "Only POST requests allowed" });
+    return res.status(405).json({ message: "Only POST requests allowed" });
   const { db } = (await connectToDatabase()) as { db: Db };
 
-  let {eventId, ticketData} = req.body;
-  // try {
-  //   // console.log(req.body);
-  //   let json: TReq = req.body;
-  //   eventId = json.eventId;
-  //   ticketData = json.ticketData;
-  // } catch (e) {
-  //   console.log("caught", e);
-  // }
+  let eventId,ticketData;
+  try {
+    // console.log(req.body);
+    let json: TReq = req.body;
+    eventId = json.eventId;
+    ticketData = json.ticketData;
+  } catch (e) {
+    console.log("caught", e);
+    return res.status(406).json({message: e})
+  }
 
   if (!ticketData)
     return res.status(201).json({ message: "no ticket data provided" });
