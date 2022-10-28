@@ -16,14 +16,27 @@ export type TReq = {
 };
 
 export type TRes = {
-      message: string;
-      elapsedTime?: number;
-    };
+  message: string;
+  elapsedTime?: number;
+};
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<TRes | { message: string }>
 ) {
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  // another common pattern
+  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  );
+
   if (req.method !== "POST")
     return res.status(405).send({ message: "Only POST requests allowed" });
   const { db } = (await connectToDatabase()) as { db: Db };
@@ -39,7 +52,7 @@ export default async function handler(
 
   const ticketEventId = ticket.eventId.replace(" ", "_");
 
-  console.log(ticketEventId, eventId)
+  console.log(ticketEventId, eventId);
 
   if (ticketEventId !== eventId)
     return res.status(203).json({
@@ -49,12 +62,10 @@ export default async function handler(
   const found = await db.collection("tickets").findOne({ data: ticketData });
 
   if (found)
-    return res
-      .status(200)
-      .json({
-        message: `${ticket.group} (${ticket.id})`,
-        elapsedTime: Date.now() - found.lastUsed,
-      } as TRes);
+    return res.status(200).json({
+      message: `${ticket.group} (${ticket.id})`,
+      elapsedTime: Date.now() - found.lastUsed,
+    } as TRes);
 
   await db.collection("tickets").insertOne({
     eventId,
@@ -64,5 +75,8 @@ export default async function handler(
 
   return res
     .status(200)
-    .json({ message: `${ticket.group} (${ticket.id})`, elapsedTime: 0 } as TRes);
+    .json({
+      message: `${ticket.group} (${ticket.id})`,
+      elapsedTime: 0,
+    } as TRes);
 }
