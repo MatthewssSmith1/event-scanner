@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+// import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../util/mongoClient";
 import { Db } from "mongodb";
 import { stringToTicket } from "../../util/makeTickets";
@@ -21,10 +21,10 @@ export type TRes = {
 };
 
 export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<TRes | { message: string }>
+  req: any,// NextApiRequest,
+  res: any//NextApiResponse<TRes | { message: string }>
 ) {
-  // return res.status(200).json(JSON.parse(req.body));
+  return res.status(200).json({message: req.body});
 
   if (req.method !== "POST")
     return res.status(405).json({ message: "Only POST requests allowed" });

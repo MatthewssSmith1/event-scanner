@@ -52,15 +52,15 @@ export default function Scan() {
         // mode: "cors", // no-cors, *cors, same-origin
         // credentials: "same-origin", // include, *same-origin, omit
         // headers: {
-          // "Content-Type": "application/json",
+        //   "Content-Type": "application/json",
           // 'Content-Type': 'application/x-www-form-urlencoded',
         // },
       };
       let res = await fetch(`${BASE_URL}/api/scan`, opts);
       let json = await res.json();
 
-      // console.log(json);
-      // return;
+      console.log(json);
+      return;
 
       if (lastTicket.current.length !== 0 && lastTicket.current === ticketData)
         return;
