@@ -24,28 +24,29 @@ export default async function handler(
   req: any,// NextApiRequest,
   res: any//NextApiResponse<TRes | { message: string }>
 ) {
-  return res.status(200).json({message: req.body});
+  const { db } = (await connectToDatabase()) as { db: Db };
+  
+  // return res.status(200);
 
   if (req.method !== "POST")
     return res.status(405).json({ message: "Only POST requests allowed" });
-  const { db } = (await connectToDatabase()) as { db: Db };
 
   let eventId, ticketData;
   try {
-    // console.log(req.body);
-    let body = req.body.split("===");
+    console.log(req.body);
+    let body = req.body
 
-    if (body.length !== 2)
-      return res.status(201).json({ message: "no ticket data provided" });
+    // if (body.length !== 2)
+    //   return res.status(201).json({ message: "no ticket data provided" });
 
-    ticketData = body[0];
-    eventId = body[1];
+    ticketData = body.ticketData;
+    eventId = body.eventId;
   } catch (e) {
     console.log("caught", e);
-    return res.status(406).json({ message: e });
+    return res.status(406).json({ message: "parse error" });
   }
 
-  if (!ticketData)
+  if (!ticketData || ticketData.length === 0)
     return res.status(201).json({ message: "no ticket data provided" });
 
   const ticket = stringToTicket(ticketData, process.env.HASH_SECRET);

@@ -46,21 +46,22 @@ export default function Scan() {
 
   const onScan = useCallback(
     async (ticketData) => {
+      console.log(JSON.stringify({ ticketData, eventId: id }));
       const opts = {
         method: "POST",
-        body: ticketData + "===" + id,
+        body: JSON.stringify({ticketData, eventId: id}),//ticketData + "===" + id,
         // mode: "cors", // no-cors, *cors, same-origin
         // credentials: "same-origin", // include, *same-origin, omit
-        // headers: {
-        //   "Content-Type": "application/json",
+        headers: {
+          "Content-Type": "application/json",
           // 'Content-Type': 'application/x-www-form-urlencoded',
-        // },
+        },
       };
       let res = await fetch(`${BASE_URL}/api/scan`, opts);
       let json = await res.json();
 
-      console.log(json);
-      return;
+      // console.log(json);
+      // return;
 
       if (lastTicket.current.length !== 0 && lastTicket.current === ticketData)
         return;
@@ -68,6 +69,8 @@ export default function Scan() {
       console.log("new ticket: ", ticketData, "  status: ", res.status);
 
       lastTicket.current = ticketData;
+
+      console.log(json)
 
       if (res.status === 200) {
         if (count !== 0) setCount(count + 1);
