@@ -46,8 +46,6 @@ export default function Scan() {
 
   const onScan = useCallback(
     async (ticketData) => {
-      console.log("here", JSON.parse(JSON.stringify({ ticketData, eventId: id })));
-      let reqBody = { ticketData, eventId: id };
       const opts = {
         method: "POST",
         body: ticketData + "===" + id,
