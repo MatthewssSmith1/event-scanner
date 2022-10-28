@@ -23,9 +23,16 @@ export default function Scan() {
 
   const updateCount = useCallback(
     () =>
-      fetch("https://event-scanner.vercel.app/api/count", {
+      fetch("event-scanner.vercel.app/api/count", {
         method: "POST",
         body: JSON.stringify({ eventId: id }),
+
+        mode: "cors", // no-cors, *cors, same-origin
+        // credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
       })
         .then((res) => res.json())
         .then(setCount),
@@ -37,8 +44,14 @@ export default function Scan() {
       const opts = {
         method: "POST",
         body: JSON.stringify({ ticketData, eventId: id }),
+        mode: "cors", // no-cors, *cors, same-origin
+        // credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
       };
-      let res = await fetch(`https://event-scanner.vercel.app/api/scan`, opts);
+      let res = await fetch(`event-scanner.vercel.app/api/scan`, opts);
       let json = await res.json();
 
       console.log(json);
@@ -47,7 +60,7 @@ export default function Scan() {
       if (lastTicket.current.length !== 0 && lastTicket.current === ticketData)
         return;
 
-      console.log("new ticket: ", ticketData, "  status: ", res.status)
+      console.log("new ticket: ", ticketData, "  status: ", res.status);
 
       lastTicket.current = ticketData;
 
@@ -71,8 +84,9 @@ export default function Scan() {
         <QrScanner onScan={onScan} onError={() => {}} />
       </div>
       <CountInfo eventId={id} count={count} updateCount={updateCount} />
-      {(error !== null ||
-        resp !== null) && <RespText resp={resp} error={error} reset={reset} />}
+      {(error !== null || resp !== null) && (
+        <RespText resp={resp} error={error} reset={reset} />
+      )}
     </div>
   );
 }

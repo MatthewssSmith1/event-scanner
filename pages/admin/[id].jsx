@@ -12,16 +12,20 @@ export default function Scan() {
 
   if (id === undefined) return <p>loading...</p>;
 
-  const deleteData = async() => {
-    const opts = {  
+  const deleteData = async () => {
+    const opts = {
       method: "POST",
       body: JSON.stringify({ eventId: id }),
+
+      mode: "cors", // no-cors, *cors, same-origin
+      // credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
     };
-    let res = await fetch(
-      "https://event-scanner.vercel.app/api/clearEvent",
-      opts
-    );
-  }
+    let res = await fetch("event-scanner.vercel.app/api/clearEvent", opts);
+  };
 
   return (
     <div className={styles.content}>
