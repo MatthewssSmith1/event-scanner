@@ -65,7 +65,7 @@ export default function Scan() {
     <div className={styles.content}>
       <h1>{`${id.toUpperCase()}`}</h1>
       <div className={styles.wrapper}>
-        <QrScanner onScan={onScan} onError={console.warn} />
+        <QrScanner onScan={onScan} onError={() => {}} />
       </div>
       <CountInfo eventId={id} count={count} updateCount={updateCount} />
       {(error !== null ||

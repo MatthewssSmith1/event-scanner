@@ -38,7 +38,7 @@ export default async function handler(
   if (ticket === undefined)
     return res.status(202).json({ message: "invalid ticket" });
 
-  const ticketEventId = ticket.eventId.replace(" ", "_");
+  const ticketEventId = ticket.eventId;//.replace(" ", "_");
 
 
   if (ticketEventId !== eventId)
