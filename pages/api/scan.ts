@@ -22,8 +22,9 @@ export type TRes = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<TRes | { message: string }>
+  res: NextApiResponse//<TRes | { message: string }>
 ) {
+  return res.status(200).json(JSON.parse(req.body));
   
   if (req.method !== "POST")
     return res.status(405).send({ message: "Only POST requests allowed" });

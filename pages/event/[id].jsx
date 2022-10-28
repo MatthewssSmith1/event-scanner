@@ -41,6 +41,9 @@ export default function Scan() {
       let res = await fetch("/api/scan", opts);
       let json = await res.json();
 
+      console.log(json);
+      return;
+
       if (lastTicket.current.length !== 0 && lastTicket.current === ticketData)
         return;
 
