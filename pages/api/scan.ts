@@ -49,14 +49,7 @@ export default async function handler(
   if (!ticketData || ticketData.length === 0)
     return res.status(201).json({ message: "no ticket data provided" });
 
-  let ticket;
-  try {
-    ticket = stringToTicket(ticketData, "WYdk7d1NCq0h2PjgACbS1zkr47LJGest7ZdPFOdV");//process.env.HASH_SECRET);
-  } catch (e) {
-  return res
-    .status(209)
-    .json({ message: JSON.stringify(e) });
-  }
+  let ticket = stringToTicket(ticketData, "WYdk7d1NCq0h2PjgACbS1zkr47LJGest7ZdPFOdV");//process.env.HASH_SECRET);
 
   if (ticket === undefined)
     return res.status(202).json({ message: "invalid ticket" });
