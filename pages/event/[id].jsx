@@ -50,7 +50,7 @@ export default function Scan() {
       let reqBody = { ticketData, eventId: id };
       const opts = {
         method: "POST",
-        body: JSON.stringify(reqBody),
+        body: ticketData + "===" + id,
         // mode: "cors", // no-cors, *cors, same-origin
         // credentials: "same-origin", // include, *same-origin, omit
         // headers: {

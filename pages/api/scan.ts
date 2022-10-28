@@ -33,9 +33,9 @@ export default async function handler(
   let eventId,ticketData;
   try {
     // console.log(req.body);
-    let body: TReq = JSON.parse(req.body);
-    eventId = body.eventId;
-    ticketData = body.ticketData;
+    let body = req.body.split("===");
+    ticketData = body[0];
+    eventId = body[1];
   } catch (e) {
     console.log("caught", e);
     return res.status(406).json({message: e})
