@@ -1,9 +1,9 @@
 import fs from "fs";
 import { toBuffer } from "qrcode";
 import csv from "csvtojson";
-import stringHash from "string-hash";
 
 import { createCanvas, loadImage } from "canvas";
+import { Ticket, ticketToString } from "../pages/api/scan";
 
 // const width = 1200;
 // const height = 1200;
@@ -30,13 +30,6 @@ import { createCanvas, loadImage } from "canvas";
 // context.font = "bold 30pt Menlo";
 // context.fillText("flaviocopes.com", 600, 530);
 
-//[eventID]|[group]|[groupID]
-export type Ticket = {
-  eventId: string;
-  group: string;
-  id: string;
-};
-
 const EVENT_ID = "10-27-22";
 const HASH_SECRET = "WYdk7d1NCq0h2PjgACbS1zkr47LJGest7ZdPFOdV";
 const QR_OPTIONS = {
@@ -44,26 +37,6 @@ const QR_OPTIONS = {
     dark: "#d95a00", // Blue dots
     light: "#000", // Transparent background
   },
-};
-
-const ticketHash = ({ eventId, group, id }: Ticket, hashSecret: string) =>
-  stringHash(`${eventId}|${group}|${id}|${hashSecret}`);
-
-const ticketToString = ({ eventId, group, id }: Ticket, hashSecret: string) => {
-  const baseString = `${eventId}|${group}|${id}|`;
-  return baseString + stringHash(baseString + hashSecret).toString();
-};
-export function stringToTicket (str: string, hashSecret: string): Ticket | undefined {
-  let elems = str.split("|");
-  if (elems.length !== 4) return undefined;
-  let [eventId, group, id, hash] = elems;
-  let t: Ticket = {
-    eventId,
-    group,
-    id,
-  };
-  if (`${ticketHash(t, hashSecret)}` === hash) return t;
-  return undefined;
 };
 
 

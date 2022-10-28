@@ -1,8 +1,33 @@
 // import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../util/mongoClient";
 import { Db } from "mongodb";
-import { stringToTicket } from "../../util/makeTickets";
-import { Ticket } from "../../util/makeTickets";
+import stringHash from "string-hash";
+//[eventID]|[group]|[groupID]
+export type Ticket = {
+  eventId: string;
+  group: string;
+  id: string;
+};
+
+export const ticketHash = ({ eventId, group, id }: Ticket, hashSecret: string) =>
+  stringHash(`${eventId}|${group}|${id}|${hashSecret}`);
+
+export const ticketToString = ({ eventId, group, id }: Ticket, hashSecret: string) => {
+  const baseString = `${eventId}|${group}|${id}|`;
+  return baseString + stringHash(baseString + hashSecret).toString();
+};
+export function stringToTicket (str: string, hashSecret: string): Ticket | undefined {
+  let elems = str.split("|");
+  if (elems.length !== 4) return undefined;
+  let [eventId, group, id, hash] = elems;
+  let t: Ticket = {
+    eventId,
+    group,
+    id,
+  };
+  if (`${ticketHash(t, hashSecret)}` === hash) return t;
+  return undefined;
+};
 
 export type Entry = {
   eventId: string;
