@@ -17,7 +17,10 @@ export default function Scan() {
       method: "POST",
       body: JSON.stringify({ eventId: id }),
     };
-    let res = await fetch("/api/clearEvent", opts);
+    let res = await fetch(
+      "https://event-scanner.vercel.app/api/clearEvent",
+      opts
+    );
   }
 
   return (

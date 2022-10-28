@@ -23,7 +23,7 @@ export default function Scan() {
 
   const updateCount = useCallback(
     () =>
-      fetch("/api/count", {
+      fetch("https://event-scanner.vercel.app/api/count", {
         method: "POST",
         body: JSON.stringify({ eventId: id }),
       })
@@ -38,7 +38,7 @@ export default function Scan() {
         method: "POST",
         body: JSON.stringify({ ticketData, eventId: id }),
       };
-      let res = await fetch("/api/scan", opts);
+      let res = await fetch(`https://event-scanner.vercel.app/api/scan`, opts);
       let json = await res.json();
 
       console.log(json);
