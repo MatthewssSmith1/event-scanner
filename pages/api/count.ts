@@ -6,14 +6,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-
   const { db } = (await connectToDatabase()) as { db: Db };
 
-  const {eventId} = JSON.parse(req.body);
+  // const { eventId } = JSON.parse(req.body);
+  const eventId = req.body;
 
-  const count = await db
-    .collection("tickets")
-    .countDocuments({ eventId });
+  console.log(eventId);
+
+  const count = await db.collection("tickets").countDocuments({ eventId });
 
   return res.status(200).json(count);
 }

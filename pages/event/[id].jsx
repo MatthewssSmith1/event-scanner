@@ -6,6 +6,11 @@ import QrScanner from "../../components/QrScanner";
 
 import styles from "../../styles/Event.module.css";
 
+const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://event-scanner.vercel.app"
+    : "";//"http://localhost:3000";
+
 export default function Scan() {
   const lastTicket = useRef("");
   const [resp, setResp] = useState(null);
@@ -21,41 +26,41 @@ export default function Scan() {
   const router = useRouter();
   const { id } = router.query;
 
-  const updateCount = useCallback(
-    () =>
-      fetch("event-scanner.vercel.app/api/count", {
+  const updateCount = useCallback(() => {
+    if (id !== undefined) {
+      fetch(`${BASE_URL}/api/count`, {
         method: "POST",
-        body: JSON.stringify({ eventId: id }),
+        body: id,
 
         mode: "cors", // no-cors, *cors, same-origin
-        // credentials: "same-origin", // include, *same-origin, omit
-        headers: {
-          "Content-Type": "application/json",
+        credentials: "same-origin", // include, *same-origin, omit
+        // headers: {
+          // "Content-Type": "application/json",
           // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
+        // },
       })
         .then((res) => res.json())
-        .then(setCount),
-    [id, setCount]
-  );
+        .then(setCount);
+    }
+  }, [id, setCount]);
 
   const onScan = useCallback(
     async (ticketData) => {
       const opts = {
         method: "POST",
         body: JSON.stringify({ ticketData, eventId: id }),
-        mode: "cors", // no-cors, *cors, same-origin
+        // mode: "cors", // no-cors, *cors, same-origin
         // credentials: "same-origin", // include, *same-origin, omit
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
           // 'Content-Type': 'application/x-www-form-urlencoded',
         },
       };
-      let res = await fetch(`event-scanner.vercel.app/api/scan`, opts);
+      let res = await fetch(`${BASE_URL}/api/scan`, opts);
       let json = await res.json();
 
-      console.log(json);
-      return;
+      // console.log(json);
+      // return;
 
       if (lastTicket.current.length !== 0 && lastTicket.current === ticketData)
         return;

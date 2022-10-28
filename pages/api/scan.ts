@@ -22,15 +22,26 @@ export type TRes = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse//<TRes | { message: string }>
+  res: NextApiResponse<TRes | { message: string }>
 ) {
-  return res.status(200).json(JSON.parse(req.body));
-  
+  // return res.status(200).json(JSON.parse(req.body));
+
   if (req.method !== "POST")
     return res.status(405).send({ message: "Only POST requests allowed" });
-  const { db } = (await connectToDatabase()) as { db: Db }; 
+  const { db } = (await connectToDatabase()) as { db: Db };
 
-  const { eventId, ticketData }: TReq = JSON.parse(req.body);
+  console.log("before");
+
+  let eventId, ticketData;
+  try {
+    console.log(req.body);
+    let json: TReq = JSON.parse(req.body);
+    eventId = json.eventId;
+    ticketData = json.ticketData;
+  } catch (e) {
+    console.log("caught", e);
+  }
+  console.log("after");
   if (!ticketData)
     return res.status(201).json({ message: "no ticket data provided" });
 
@@ -39,8 +50,7 @@ export default async function handler(
   if (ticket === undefined)
     return res.status(202).json({ message: "invalid ticket" });
 
-  const ticketEventId = ticket.eventId;//.replace(" ", "_");
-
+  const ticketEventId = ticket.eventId; //.replace(" ", "_");
 
   if (ticketEventId !== eventId)
     return res.status(203).json({
@@ -61,10 +71,8 @@ export default async function handler(
     lastUsed: Date.now(),
   } as Entry);
 
-  return res
-    .status(200)
-    .json({
-      message: `${ticket.group} (${ticket.id})`,
-      elapsedTime: 0,
-    } as TRes);
+  return res.status(200).json({
+    message: `${ticket.group} (${ticket.id})`,
+    elapsedTime: 0,
+  } as TRes);
 }
