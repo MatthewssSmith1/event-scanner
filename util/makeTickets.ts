@@ -49,9 +49,9 @@ const QR_OPTIONS = {
 const ticketHash = ({ eventId, group, id }: Ticket, hashSecret: string) =>
   stringHash(`${eventId}|${group}|${id}|${hashSecret}`);
 
-const ticketToString = ({ eventId, group, id }: Ticket) => {
+const ticketToString = ({ eventId, group, id }: Ticket, hashSecret: string) => {
   const baseString = `${eventId}|${group}|${id}|`;
-  return baseString + stringHash(baseString + HASH_SECRET).toString();
+  return baseString + stringHash(baseString + hashSecret).toString();
 };
 export function stringToTicket (str: string, hashSecret: string): Ticket | undefined {
   let elems = str.split("|");
@@ -87,7 +87,7 @@ async function draw() {
         id: `${id}`,
       };
 
-      let qrBuffer = await toBuffer(ticketToString(ticket), QR_OPTIONS);
+      let qrBuffer = await toBuffer(ticketToString(ticket, HASH_SECRET), QR_OPTIONS);
       ensureDirExists(`./util/tickets/${group}`);
       fs.writeFileSync(`./util/tickets/${group}/${id}.png`, qrBuffer); // canvas.toBuffer("image/png"));
     }
