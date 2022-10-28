@@ -25,9 +25,9 @@ export default async function handler(
   res: any //NextApiResponse<TRes | { message: string }>
 ) {
   let { eventId, ticketData } = req.body;
-  // return res
-  //   .status(405)
-  //   .json({ message: JSON.stringify({ eventId, ticketData }) });
+  return res
+    .status(409)
+    .json({ message: JSON.stringify({ eventId, ticketData }) });
 
   const { db } = (await connectToDatabase()) as { db: Db };
 
@@ -49,37 +49,37 @@ export default async function handler(
   //   return res.status(406).json({ message: "parse error" });
   // }
 
-  if (!ticketData || ticketData.length === 0)
-    return res.status(201).json({ message: "no ticket data provided" });
+  // if (!ticketData || ticketData.length === 0)
+  //   return res.status(201).json({ message: "no ticket data provided" });
 
-  const ticket = stringToTicket(ticketData, process.env.HASH_SECRET);
+  // const ticket = stringToTicket(ticketData, process.env.HASH_SECRET);
 
-  if (ticket === undefined)
-    return res.status(202).json({ message: "invalid ticket" });
+  // if (ticket === undefined)
+  //   return res.status(202).json({ message: "invalid ticket" });
 
-  const ticketEventId = ticket.eventId; //.replace(" ", "_");
+  // const ticketEventId = ticket.eventId; //.replace(" ", "_");
 
-  if (ticketEventId !== eventId)
-    return res.status(203).json({
-      message: `wrong event: ${ticket.eventId} ${ticket.group} (${ticket.id})`,
-    });
+  // if (ticketEventId !== eventId)
+  //   return res.status(203).json({
+  //     message: `wrong event: ${ticket.eventId} ${ticket.group} (${ticket.id})`,
+  //   });
 
-  const found = await db.collection("tickets").findOne({ data: ticketData });
+  // const found = await db.collection("tickets").findOne({ data: ticketData });
 
-  if (found)
-    return res.status(200).json({
-      message: `${ticket.group} (${ticket.id})`,
-      elapsedTime: Date.now() - found.lastUsed,
-    } as TRes);
+  // if (found)
+  //   return res.status(200).json({
+  //     message: `${ticket.group} (${ticket.id})`,
+  //     elapsedTime: Date.now() - found.lastUsed,
+  //   } as TRes);
 
-  await db.collection("tickets").insertOne({
-    eventId,
-    data: ticketData,
-    lastUsed: Date.now(),
-  } as Entry);
+  // await db.collection("tickets").insertOne({
+  //   eventId,
+  //   data: ticketData,
+  //   lastUsed: Date.now(),
+  // } as Entry);
 
-  return res.status(200).json({
-    message: `${ticket.group} (${ticket.id})`,
-    elapsedTime: 0,
-  } as TRes);
+  // return res.status(200).json({
+  //   message: `${ticket.group} (${ticket.id})`,
+  //   elapsedTime: 0,
+  // } as TRes);
 }
