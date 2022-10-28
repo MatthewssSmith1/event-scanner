@@ -27,7 +27,7 @@ export default async function handler(
   
   if (req.method !== "POST")
     return res.status(405).send({ message: "Only POST requests allowed" });
-  const { db } = (await connectToDatabase()) as { db: Db };
+  const { db } = (await connectToDatabase()) as { db: Db }; 
 
   const { eventId, ticketData }: TReq = JSON.parse(req.body);
   if (!ticketData)
