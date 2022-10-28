@@ -46,13 +46,14 @@ export default function Scan() {
 
   const onScan = useCallback(
     async (ticketData) => {
+      console.log("here", JSON.parse(JSON.stringify({ ticketData, eventId: id })));
       const opts = {
         method: "POST",
         body: JSON.stringify({ ticketData, eventId: id }),
-        // mode: "cors", // no-cors, *cors, same-origin
-        // credentials: "same-origin", // include, *same-origin, omit
+        mode: "cors", // no-cors, *cors, same-origin
+        credentials: "same-origin", // include, *same-origin, omit
         headers: {
-          // "Content-Type": "application/json",
+          "Content-Type": "application/json",
           // 'Content-Type': 'application/x-www-form-urlencoded',
         },
       };
