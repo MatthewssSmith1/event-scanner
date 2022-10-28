@@ -26,7 +26,7 @@ export default async function handler(
 ) {
   let { eventId, ticketData } = req.body;
   return res
-    .status(409)
+    .status(209)
     .json({ message: JSON.stringify({ eventId, ticketData }) });
 
   const { db } = (await connectToDatabase()) as { db: Db };
