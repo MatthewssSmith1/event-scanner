@@ -87,7 +87,7 @@ export default function Scan() {
 
   return (
     <div className={styles.content}>
-      <h1>{`${id.toUpperCase()}`}</h1>
+      {/* <h1>{`${id.toUpperCase()}`}</h1> */}
       <div className={styles.wrapper}>
         <QrScanner onScan={onScan} onError={() => {}} />
       </div>
