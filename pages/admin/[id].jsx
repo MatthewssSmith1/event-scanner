@@ -6,6 +6,12 @@ import QrScanner from "../../components/QrScanner";
 
 import styles from "../../styles/Event.module.css";
 
+
+const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://event-scanner.vercel.app"
+    : "";//"http://localhost:3000";
+
 export default function Scan() {
   const router = useRouter();
   const { id } = router.query;
@@ -24,7 +30,7 @@ export default function Scan() {
         // 'Content-Type': 'application/x-www-form-urlencoded',
       },
     };
-    let res = await fetch("event-scanner.vercel.app/api/clearEvent", opts);
+    let res = await fetch(`${BASE_URL}/api/clearEvent`, opts);
   };
 
   return (

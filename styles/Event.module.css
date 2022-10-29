@@ -10,11 +10,12 @@
 .content .wrapper {
   /* margin: -42px 0; */
   margin-top: -2rem;
+  margin-bottom: -1rem;
   overflow: none;
 }
 
 .content .wrapper > * {
-  width: 90vw;
+  width: 70vw;
 }
 
 .content > h1 {
@@ -53,7 +54,7 @@
   /* width: 12rem; */
   height: 6rem;
   display: flex;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .counter .counts {
