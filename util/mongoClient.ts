@@ -1,6 +1,6 @@
 import { MongoClient, Db } from "mongodb";
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = "mongodb+srv://dbuser:jkZIe1AA5c9WhbvZ@main.1zhqr.mongodb.net/Main?retryWrites=true&w=majority"//process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
   throw new Error("mongodb.ts ERROR: environment var MONGODB_URI not defined.");

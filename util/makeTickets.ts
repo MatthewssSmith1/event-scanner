@@ -35,7 +35,7 @@ const HASH_SECRET = "WYdk7d1NCq0h2PjgACbS1zkr47LJGest7ZdPFOdV";
 const QR_OPTIONS = {
   color: {
     dark: "#d95a00", // Blue dots
-    light: "#000", // Transparent background
+    light: "#fff", // Transparent background
   },
 };
 

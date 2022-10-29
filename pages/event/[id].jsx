@@ -21,6 +21,7 @@ export default function Scan() {
   const reset = () => {
     setResp(null);
     setError(null);
+    lastTicket.current = ""
   };
 
   const router = useRouter();
