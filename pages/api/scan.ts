@@ -16,6 +16,7 @@ export const ticketToString = ({ eventId, group, id }: Ticket, hashSecret: strin
   const baseString = `${eventId}|${group}|${id}|`;
   return baseString + stringHash(baseString + hashSecret).toString();
 };
+
 export function stringToTicket (str: string, hashSecret: string): Ticket | undefined {
   let elems = str.split("|");
   if (elems.length !== 4) return undefined;
@@ -74,38 +75,47 @@ export default async function handler(
   if (!ticketData || ticketData.length === 0)
     return res.status(201).json({ message: "no ticket data provided" });
 
-  let ticket = stringToTicket(ticketData, "WYdk7d1NCq0h2PjgACbS1zkr47LJGest7ZdPFOdV");//process.env.HASH_SECRET);
+  // let ticket = stringToTicket(ticketData, "WYdk7d1NCq0h2PjgACbS1zkr47LJGest7ZdPFOdV");//process.env.HASH_SECRET);
+
+  let elems = ticketData.split("|");
+  if (elems.length !== 4) return undefined;
+  let [eId, group, id, hash] = elems;
+  let ticket = {
+    eventId: eId,
+    group,
+    id,
+  };
 
   if (ticket === undefined)
     return res.status(202).json({ message: "invalid ticket" });
 
-  return res
-    .status(209)
-    .json({ message: JSON.stringify({ eventId, ticketData }) });
+  // return res
+  //   .status(209)
+  //   .json({ message: JSON.stringify({ eventId, ticketData }) });
 
-  // const ticketEventId = ticket.eventId; //.replace(" ", "_");
+  const ticketEventId = ticket.eventId; //.replace(" ", "_");
 
-  // if (ticketEventId !== eventId)
-  //   return res.status(203).json({
-  //     message: `wrong event: ${ticket.eventId} ${ticket.group} (${ticket.id})`,
-  //   });
+  if (ticketEventId !== eventId)
+    return res.status(203).json({
+      message: `wrong event: ${ticket.eventId} ${ticket.group} (${ticket.id})`,
+    });
 
-  // const found = await db.collection("tickets").findOne({ data: ticketData });
+  const found = await db.collection("tickets").findOne({ data: ticketData });
 
-  // if (found)
-  //   return res.status(200).json({
-  //     message: `${ticket.group} (${ticket.id})`,
-  //     elapsedTime: Date.now() - found.lastUsed,
-  //   } as TRes);
+  if (found)
+    return res.status(200).json({
+      message: `${ticket.group} (${ticket.id})`,
+      elapsedTime: Date.now() - found.lastUsed,
+    } as TRes);
 
-  // await db.collection("tickets").insertOne({
-  //   eventId,
-  //   data: ticketData,
-  //   lastUsed: Date.now(),
-  // } as Entry);
+  await db.collection("tickets").insertOne({
+    eventId,
+    data: ticketData,
+    lastUsed: Date.now(),
+  } as Entry);
 
-  // return res.status(200).json({
-  //   message: `${ticket.group} (${ticket.id})`,
-  //   elapsedTime: 0,
-  // } as TRes);
+  return res.status(200).json({
+    message: `${ticket.group} (${ticket.id})`,
+    elapsedTime: 0,
+  } as TRes);
 }
